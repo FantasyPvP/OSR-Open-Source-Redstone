@@ -1,5 +1,6 @@
 # 16 bit computer 
- written in python by a computer obsessed gcse student and is not gonna go well but here goes
+ written in python by a computer obsessed gcse student (my strongest subjects are computer science
+and maths which given I'm starting this kind of project should be fairly obvious)
 
 so yeah I decided to make a computer in python cos i got bored of imagining life using a computer from the last 10 years,
 i figured that the solution was just to make my own in python
@@ -29,4 +30,7 @@ my long term goal (if i actually work on this project and not forget about it) i
     - create a basic command line that can run on the virtual hardware
     - implement an custom low level language (assembly) that can be written in a code editor and compiled for use on the vm
     - implement a system for applications and running programs / saving them in storage
+        - this will most likely use "ROM" files stored externally as text files full of binary
     - make this into a full application (im not gonna try doing a pyinstaller exe though as im using linux as my development platform so it would be impractical)
+    - for the os create a spec that is easy to program for, efficient / scalable and can run on a Minecraft computer so someone can make use of the architecture
+        to make something that can run a standard program library that I and anyone else who knows the spec can program for.
