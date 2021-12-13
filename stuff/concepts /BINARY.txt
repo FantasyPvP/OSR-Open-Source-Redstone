@@ -1,0 +1,18 @@
+
+
+# binary will work using a 3 line syntax,
+
+    - the first line will be the command / instruction, for example the ADD command in assembly.
+        - this is written as  0000,0010
+    - the second line is the first arguement of the program, for example, for the ADD statement, it will be the location of a register
+        - for example,  0000,0001
+    - the third line is either a second arguement, or it is simply 0, in which case the line is ignored or gives an error if the command takes 2 arguements
+        - for example,  0000,0010
+
+    - these three lines perform a binary add on the values from register 1 and register 2 and then will automatically send that to the accumulator
+        - this entire command can be written as:
+        00000010
+        00000001
+        00000010
+        - even though lines 1 and 3 are the same value, they both do different things depending on the state of the processor at the time.
+        

@@ -1,0 +1,22 @@
+
+
+simple addition program:
+
+    assembly:
+
+        ADD [REG-1 + REG-2];
+        END;
+
+    half-compiled:
+
+        ADD;
+        REG-1
+        REG-2
+        END
+
+    fully compiled:
+
+        0000,0010
+        0000,0001
+        0000,0010
+
