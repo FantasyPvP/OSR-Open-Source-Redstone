@@ -162,7 +162,3 @@ class RAM(store):
 
 
 
-RAM = RAM()
-for x in RAM.RAM:
-    for y in x:
-        print(y)

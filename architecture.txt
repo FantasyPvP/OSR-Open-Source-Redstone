@@ -1,0 +1,69 @@
+
+# program architecture: (WIP)
+# when using numbers in this documentation i will be using Hexadecimal 
+# this is becausee it is similar to binary but more conventient to read and write by a human. the compiler will convert it to binary to run.
+
+
+first we need a way to move files between different registers, 
+    - on each instruction cycle the computer will automatically load the next instruction from the program that it is working on
+    - this program will be stored in a register called the CPR (current program register)
+    - this will be a 16 bit register storing the ROM port that the instruction is being called from.
+    - this means that when we want to jump to another instruction, the system can take the value from the CPR and use it to call the required
+      ROM module and address.
+    - to move files between registers we will use the ">" symbol to indicate the direction of data flow for example:
+
+      RAM-01 > REG-01 
+
+
+
+
+
+# registers:
+    - CPR - current program register, stores the ROM address of the current program being executed
+    - PC - stores the current ROM address for the operating system so when you exit a program it can pick up where it left off
+    - ACC - accumulator - stores the output of the ALU
+    - REG-1, REG-2, ... REG-16 - general purpose registers for storing data that is currently in use and performing calculations / functions
+
+    - RAM - stores data that needs to be kept for later when the program exits
+    - ROM - stores program instructions that a program can iterate through when it is run.
+    - HDD - stores data that is saved permanently (will use a text file eventually for the python program not sure about mc though)
+
+
+
+
+assembly code structure
+
+binary [hex] assembly [args] (usage)
+
+0000,0001 [01] MVE [source "->" destination] (moves the value from the first location to the second location)
+0000,0010 [02] ADD [primary "+" secondary]   (adds the first value to the second value and saves to accumulator)
+0000,0010 [03] SUB [primary "-" secondary]   (subtracts the second value from the first value)
+0000,0010 [04] SFT [number "<>" shift]       (binary shifts the value to the left or right by a certain amount)
+0000,0010 [05] JMP [location]                (loads the next instruction from the specified memory location)
+0000,0010 [06] CND [location]                (skips next line if false, proceeds sequentially if true, statement will evaluate based on the value of the memory location)
+0000,0010 [07]
+0000,0010 [08]
+0000,0010 [09]
+0000,0010 [0a]
+0000,0010 [0b]
+0000,0010 [0c]
+0000,0010 [0d]
+0000,0010 [0e]
+0000,0010 [0f]
+0000,0010 [10]
+0000,0010 [11]
+0000,0010 [12]
+0000,0010 [13]
+0000,0010 [14]
+0000,0010 [15]
+0000,0010 [16]
+0000,0010 [17]
+0000,0010 [18]
+0000,0010 [19]
+0000,0010 [1a]
+0000,0010 [1b]
+0000,0010 [1c]
+0000,0010 [1d]
+0000,0010 [1e]
+0000,0010 [1f]
+
