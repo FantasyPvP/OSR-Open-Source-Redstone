@@ -23,12 +23,17 @@ it would probably easier to do other arithmetic operations and things to do this
 my friend may implement this for me if the architecture is feasable to implement as he is an expert on restone computers 
 his channel link here: (https://www.youtube.com/c/TheDarkness344/videos)
 
+My aim is to make this completely from the ground up, in a literal sense
+In the past I've tried projects where I've started with advanced structures and tried to workmy way down to lower level constructs
+I've learned that this doesn't usually work and that I need to start bottom up with something low level and work my way up
 
 my long term goal (if i actually work on this project and not forget about it) is the following:
 
     - create a hardware system that can run binary commands (probably an 8 bit instruction set) and store 16 bit numbers using a 16 bit memory addressing system
     - create a basic command line that can run on the virtual hardware
     - implement an custom low level language (assembly) that can be written in a code editor and compiled for use on the vm
+    - maybe make a version of this into a higher level language that can be compiled down to the assembly to make it easier to program more
+          complex things 
     - implement a system for applications and running programs / saving them in storage
         - this will most likely use "ROM" files stored externally as text files full of binary
     - make this into a full application (im not gonna try doing a pyinstaller exe though as im using linux as my development platform so it would be impractical)
