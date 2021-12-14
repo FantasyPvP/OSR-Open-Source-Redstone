@@ -1,0 +1,30 @@
+# this part of the documentation will cover / help us to visualise the way that objects are stored in the processor and the way that they are handled
+
+
+- objects are a really important part of the processor and are essential in any program. 
+- an object is simply an abstraction of one or more memory locations that are used to store variables in the program as it is running. 
+- a variable in a programming language is an abstraction of a piece of data in RAM. 
+- these variables can be fetched from RAM using its identifier that is found in a lookup system that correlates the name of the variable to where it is stored in RAM
+- this kind of abstraction allows us to write programs in more human readable ways that are simpler for us to understand even though they are much more complex for computers
+  than just a value stored in a memory location that is manually fetched
+- this is one of the main things that separates high level languages from low level languages, that layer of abstraction that allows us to leave the tedious tasks that we would
+  find confusing for the computer to deal with while we write advanced code that can do a range of things in a way that is convenient, easy to understand, and more difficult
+  to get lost in
+- objects are really important for high level languages because they are what provides the abstraction and lets us manipulate data in complex ways
+
+
+implementation:
+
+- the way that I intend to implement ojects is at its lowest level with a robust system that allows us to manipulate values effectively through the assembly language
+  and store data in ram using a system that allows us to easily fetch variables from ram and make use of them, like calling a function, every time we use the variable,
+  it has to come from RAM.
+- using the assembly language, we can use the low level code to manipulate these objects using their binary or hexadecimal locations in RAM
+- this easy manipulation of the variables and memory locations lays down a framework for a higher level language which i'll give some information on here but a full 
+  documentation in another file
+    - the language will be object and class based, this makes it modular so the compiler can go through it a bit at a time and this will also allow the user to write
+      the language across multiple files, making for a much easier, more modular development process on applications
+    - it will have a simple, easy to write syntax, the goal is to make something that is easy to learn so potential developers wont be put off by a complex, 
+      hard to learn language
+    - it will most likely be fairly static. what i mean by this is that you have to declare variable types before you assign them. this means that a variable is more
+      definite, so the computer can more easily process it when you assign or change it without having to worry about it changing type.
+    

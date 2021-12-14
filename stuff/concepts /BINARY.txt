@@ -15,4 +15,11 @@
         00000001
         00000010
         - even though lines 1 and 3 are the same value, they both do different things depending on the state of the processor at the time.
+        - what this essentially means is that the system uses a 3 step process to execute instructions.
+        - the processor will fetch 3 lines of binary at a time from program memory.
+        - each first line of binary out will be execute with the other 2 as arguements,
+        - if the command entered has less than 2 arguements the ones that dont exist will be zeros and will be ignored anyway
+        - the first line of the binary will show the processor the command
+        - the second line specifies the adresss to take from
+        - the third line specifies the address to copy to
         
