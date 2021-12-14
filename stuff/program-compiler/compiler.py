@@ -20,7 +20,7 @@ def compiler(source, binary, assemblyDict, fileName, binaryName):
 
         if line[0] != "#":
             command = line[0:3]
-            logs.write(command + " [\n")
+            
 
 
             arg2Confirm = False
@@ -35,7 +35,7 @@ def compiler(source, binary, assemblyDict, fileName, binaryName):
             except:
                 arg1 = args[1:-1]
             
-            logs.write("    " + arg1 + "\n")
+            
 
             if arg2Confirm == True:
                 try:
@@ -47,12 +47,34 @@ def compiler(source, binary, assemblyDict, fileName, binaryName):
                     
                     arg2 = args[start + 1:-1]
                     print(arg2)
-                    logs.write("    " + arg2 + "\n")
+
 
                 except:
                     print("an error has ocurred")
-    
+
+
+
+
+
+
+
+
+
+            logs.write(command + " [\n")
+            logs.write("    " + arg1 + "\n")
+            if arg2Confirm:
+                logs.write("    " + arg2 + "\n")
+            else:
+                logs.write("    (no-arg)\n")
             logs.write("]\n")
+
+
+
+
+
+
+
+
 
         # compiling to binary
 
@@ -136,6 +158,7 @@ assemblyDict = {
     "LDA" : "00001011",
     "STA" : "00001100",
     "RMV" : "00001101",
+    "VAR" : "00001110",
 
     # general purpose registers
     "REG-0" : "00000000",

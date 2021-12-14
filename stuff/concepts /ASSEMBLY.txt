@@ -65,7 +65,7 @@ binary [hex] assembly [args] (usage)
 0000,1011 [0b] LDA [RAM "->" register]       (takes value from ram and puts it in a register)
 0000,1100 [0c] STA [register "->" RAM]       (takes value from a register and stores it in RAM)
 0000,1101 [0d] RMV [source "->" destination] (moves value between different RAM locations)
-0000,0010 [0e]
+0000,0010 [0e] VAR [value "->" destination]  (creates a binary variable at location specified)
 0000,0010 [0f]
 0000,0010 [10]
 0000,0010 [11]
