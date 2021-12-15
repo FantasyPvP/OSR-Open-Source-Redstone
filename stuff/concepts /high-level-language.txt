@@ -29,14 +29,15 @@ the language / syntax:
 
     - calling variables / functions
         - examples of all syntax explained here will be given under this section
-        - an in-built function will be called with the "$" symbol whereas a user defined function will be called with "@" in reference to the function.
-        
+        - an in-built function will be called with the "$" symbol
+        - a user defined function will be defined and called with "@" in reference to the function so the compiler can find the functions and link their memory locations.
 
         
 
 
 
-examples:
+examples: 
+(for each program assume that the first line is the first line in the file / the first location in ROM)
 
     - hello world
 
@@ -51,22 +52,65 @@ examples:
         VAR [STR "hello world" -> 01]
         LDA [01 -> REG-1]
         OUT [REG-1]
+        END []
+
 
 
 
     - basic program with a class:
 
         class main():
-            function default():
+            function @default():
                 INT x = 1 + 1
                 $output(x)
+                &return()
+
+        - the class is declared with the class variable like it would be in python
+        - function is declared by the function keyword on an indented line inside the class
+        - everything inside the function is further indented to show its contents
+        - the INT keyword is used to show the variable type of "x"
+        - "&return" is used to exit the function
+        - basic mathematical operations like + and - can be used natively, however more complex operations like division
+          and multiplication must be done using inbuilt modules
+
 
 
 
         - assembly equivalent:
+        (all code stored in main.txt)
 
 
-        
-
-
+        #main.default:
+        VAR [0 -> 01] #x
+        INT [1 -> 02] 
+        INT [1 -> 03]
+        LDA [02 -> REG-1]
+        LDA [03 -> REG-2]
+        ADD [REG-1 + REG-2]
+        OUP [ALU]
         END []
+
+
+    - basic program that takes an input, stores an integer, and outputs "hello world" that number of times
+
+      class main():
+
+          function @default():
+              INT num = $input("enter an integer")
+              loop i, if i < num, i += 1:
+                  $output(STR "hello world")
+              &return()
+
+
+      - all of the logic for this program is stored in the "main" class in the "default" function
+      - it declares an integer with the identifier "num"
+      - it assigns an input to the integer "num"
+      - the loop keyword loops everything inside it "num" times
+      - inside the loop there is an output statement that outputs "hello world"
+      - it then returns nothing from the function
+
+      assembly implementation:
+      (main.txt)
+
+
+ 

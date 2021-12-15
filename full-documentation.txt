@@ -1,0 +1,285 @@
+# 16 bit computer 
+ written in python by a computer obsessed gcse student (my strongest subjects are computer science
+and maths which given I'm starting this kind of project should be fairly obvious)
+
+so yeah I decided to make a computer in python cos i got bored of imagining life using a computer from the last 10 years,
+i figured that the solution was just to make my own in python
+
+im using python because it is the only language i am familiar with however if performance becomes an issue for a basic command line
+operating system that i intend to make, which i suspect it will be it may be a smart idea to use c++ as i have some very basic knowledge
+about it so i wouldnt need to start learning completely from scratch
+
+
+
+
+my idea for the computer is that each memory register will be a python object that is defined / created on the initialisation of the program 
+so a binary value (a list of integers [0-1]) can be stored in the variable and controlled by an object class
+    (i could also use tuple when i assign values to memory so that i am not tempted to change individual bits but idk)
+
+ all operations / arithmetic operations that this program will perform will be in binary and the entire system will run on a basic
+    set of binary functions (for example, AND, NOT, OR, ADD, SUB, DIV) and so on, all of these functions will manipulate the values
+    just like on real hardware
+it would probably easier to do other arithmetic operations and things to do this however this could be implemented into a minecraft redstone computer
+my friend may implement this for me if the architecture is feasable to implement as he is an expert on restone computers 
+his channel link here: (https://www.youtube.com/c/TheDarkness344/videos)
+
+My aim is to make this completely from the ground up, in a literal sense
+In the past I've tried projects where I've started with advanced structures and tried to workmy way down to lower level constructs
+I've learned that this doesn't usually work and that I need to start bottom up with something low level and work my way up
+
+my long term goal (if i actually work on this project and not forget about it) is the following:
+
+    - create a hardware system that can run binary commands (probably an 8 bit instruction set) and store 16 bit numbers using a 16 bit memory addressing system
+    - create a basic command line that can run on the virtual hardware
+    - implement an custom low level language (assembly) that can be written in a code editor and compiled for use on the vm
+    - maybe make a version of this into a higher level language that can be compiled down to the assembly to make it easier to program more
+          complex things 
+    - implement a system for applications and running programs / saving them in storage
+        - this will most likely use "ROM" files stored externally as text files full of binary
+    - make this into a full application (im not gonna try doing a pyinstaller exe though as im using linux as my development platform so it would be impractical)
+    - for the os create a spec that is easy to program for, efficient / scalable and can run on a Minecraft computer so someone can make use of the architecture
+        to make something that can run a standard program library that I and anyone else who knows the spec can program for.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# program architecture: (WIP)
+# when using numbers in this documentation i will be using Hexadecimal 
+# this is becausee it is similar to binary but more conventient to read and write by a human. the compiler will convert it to binary to run.
+
+
+first we need a way to move files between different registers, 
+    - on each instruction cycle the computer will automatically load the next instruction from the program that it is working on
+    - this program will be stored in a register called the CPR (current program register)
+    - this will be a 16 bit register storing the ROM port that the instruction is being called from.
+    - this means that when we want to jump to another instruction, the system can take the value from the CPR and use it to call the required
+      ROM module and address.
+    - to move files between registers we will use the ">" symbol to indicate the direction of data flow for example:
+
+      RAM-01 > REG-01 
+
+
+
+
+
+# registers:
+    - CPR - current program register, stores the ROM address of the current program being executed
+    - PC - stores the current ROM address for the operating system so when you exit a program it can pick up where it left off
+    - ACC - accumulator - stores the output of the ALU
+    - REG-1, REG-2, ... REG-16 - general purpose registers for storing data that is currently in use and performing calculations / functions
+
+    - RAM - stores data that needs to be kept for later when the program exits
+    - ROM - stores program instructions that a program can iterate through when it is run.
+    - HDD - stores data that is saved permanently (will use a text file eventually for the python program not sure about mc though)
+
+
+
+
+# binary will work using a 3 line syntax,
+
+    - the first line will be the command / instruction, for example the ADD command in assembly.
+        - this is written as  0000,0010
+    - the second line is the first arguement of the program, for example, for the ADD statement, it will be the location of a register
+        - for example,  0000,0001
+    - the third line is either a second arguement, or it is simply 0, in which case the line is ignored or gives an error if the command takes 2 arguements
+        - for example,  0000,0010
+
+    - these three lines perform a binary add on the values from register 1 and register 2 and then will automatically send that to the accumulator
+        - this entire command can be written as:
+        00000010
+        00000001
+        00000010
+        - even though lines 1 and 3 are the same value, they both do different things depending on the state of the processor at the time.
+        - what this essentially means is that the system uses a 3 step process to execute instructions.
+        - the processor will fetch 3 lines of binary at a time from program memory.
+        - each first line of binary out will be execute with the other 2 as arguements,
+        - if the command entered has less than 2 arguements the ones that dont exist will be zeros and will be ignored anyway
+        - the first line of the binary will show the processor the command
+        - the second line specifies the adresss to take from
+        - the third line specifies the address to copy to
+
+
+
+assembly code command structure
+
+binary [hex] assembly [args] (usage)
+
+0000,0001 [01] MVE [source "->" destination] (moves the value from the first location to the second location)
+0000,0010 [02] ADD [primary "+" secondary]   (adds the first value to the second value and saves to accumulator, the values are registers)
+0000,0011 [03] SUB [primary "-" secondary]   (subtracts the second value from the first value)
+0000,0100 [04] SFT [number "<>" shift]       (binary shifts the value to the left or right by a certain amount)
+0000,0101 [05] JMP [location]                (loads the next instruction from the specified memory location)
+0000,0110 [06] CND [location]                (skips next line if false, proceeds sequentially if true, statement will evaluate based on the value of the memory location)
+0000,0111 [07] CLR [location]                (clears the memory location specified)
+0000,1000 [08] END []                        (ends the current program and resumes the operating system running)
+0000,1001 [09] INP [location]                (takes a user input then saves it to the specified location)
+0000,1010 [0a] OUP [location]                (outputs the contents of the specified memory location to the user)
+0000,1011 [0b] LDA [RAM "->" register]       (takes value from ram and puts it in a register)
+0000,1100 [0c] STA [register "->" RAM]       (takes value from a register and stores it in RAM)
+0000,1101 [0d] RMV [source "->" destination] (moves value between different RAM locations)
+0000,0010 [0e] VAR [value "->" destination]  (creates a binary variable at location specified)
+0000,0010 [0f]
+0000,0010 [10]
+0000,0010 [11]
+0000,0010 [12]
+0000,0010 [13]
+0000,0010 [14]
+0000,0010 [15]
+0000,0010 [16]
+0000,0010 [17]
+0000,0010 [18]
+0000,0010 [19]
+0000,0010 [1a]
+0000,0010 [1b]
+0000,0010 [1c]
+0000,0010 [1d]
+0000,0010 [1e]
+0000,0010 [1f]
+
+
+
+# this part of the documentation will cover / help us to visualise the way that objects are stored in the processor and the way that they are handled
+
+
+- objects are a really important part of the processor and are essential in any program. 
+- an object is simply an abstraction of one or more memory locations that are used to store variables in the program as it is running. 
+- a variable in a programming language is an abstraction of a piece of data in RAM. 
+- these variables can be fetched from RAM using its identifier that is found in a lookup system that correlates the name of the variable to where it is stored in RAM
+- this kind of abstraction allows us to write programs in more human readable ways that are simpler for us to understand even though they are much more complex for computers
+  than just a value stored in a memory location that is manually fetched
+- this is one of the main things that separates high level languages from low level languages, that layer of abstraction that allows us to leave the tedious tasks that we would
+  find confusing for the computer to deal with while we write advanced code that can do a range of things in a way that is convenient, easy to understand, and more difficult
+  to get lost in
+- objects are really important for high level languages because they are what provides the abstraction and lets us manipulate data in complex ways
+
+
+implementation:
+
+- the way that I intend to implement ojects is at its lowest level with a robust system that allows us to manipulate values effectively through the assembly language
+  and store data in ram using a system that allows us to easily fetch variables from ram and make use of them, like calling a function, every time we use the variable,
+  it has to come from RAM.
+- using the assembly language, we can use the low level code to manipulate these objects using their binary or hexadecimal locations in RAM
+- this easy manipulation of the variables and memory locations lays down a framework for a higher level language which i'll give some information on here but a full 
+  documentation in another file
+    - the language will be object and class based, this makes it modular so the compiler can go through it a bit at a time and this will also allow the user to write
+      the language across multiple files, making for a much easier, more modular development process on applications
+    - it will have a simple, easy to write syntax, the goal is to make something that is easy to learn so potential developers wont be put off by a complex, 
+      hard to learn language
+    - it will most likely be fairly static. what i mean by this is that you have to declare variable types before you assign them. this means that a variable is more
+      definite, so the computer can more easily process it when you assign or change it without having to worry about it changing type.
+    
+
+    # high level language planning / documentation
+
+here goes i guess, this is going to be the hardest part of this entire project but it will be necessary in order to be able to program effectively for the environment
+
+
+CY++ high level programming language specs / programming style:
+
+    - object and class oriented,
+        - each class will be compiled separately into a separate assembly code file, then they will be combined together into a working program / executable.
+        - a class will consist of several functions including a function labelled "Default" which when compiled into assembly will be placed at the top to execute first
+          in the program.
+        - one class must be labelled "main" and this class will be put in a file called main.txt and will always execute first on the vm based architecture
+        - all of the other classes will be compiled into the same directory, with the name of the class that it contains.
+        - when this is compiled to binary, we could either have a dynamic memory allocator on the system that will make the variable locations for each running class relative
+          or we could make it so that all of the class files when compiled to binary are put into one file. this would make the most sense as it would eliminate the need 
+          for custom hardware and extra assembly commands / processes just to allocate memory for each class when we can unify the program at a later stage.
+        - separating into classes means that we can have a separate abstract syntax tree for each class / function, this simplifys things since we are dealing with less
+          complex logic / algorithms, essentially decomposing the problem into multiple diffrent low level programs that are all compiled together into binary
+
+    - static variable declaration
+        - to keep memory management simple for the computer to handle (remember we are dealing with an architecture that could run on a redstone comuter, many of which
+          run at well under 1Hz, with 1Hz being an impressive achievement even for efficient hardware)
+        - it means that we have to declare the type of the variable before we assign anything to it. this makes memory management easier like ive previously stated but
+          can result in some inconvenience for users that are more used to more dynamic languages like python
+
+
+
+the language / syntax:
+
+    - calling variables / functions
+        - examples of all syntax explained here will be given under this section
+        - an in-built function will be called with the "$" symbol whereas a user defined function will be called with "@" in reference to the function.
+        
+
+        
+
+
+
+examples: 
+(for each program assume that the first line is the first line in the file / the first location in ROM)
+
+    - hello world
+
+        $output(STR "hello world")
+
+        - "$output" is the inbuilt method for outputting to console
+        - the string "hello there" is declared using the "STR" keyword to its left
+        - the brackets that are to the right of the output function contain everything that is to be outputted
+
+        - assembly equivalent:
+
+        VAR [STR "hello world" -> 01]
+        LDA [01 -> REG-1]
+        OUT [REG-1]
+        END []
+        
+
+      class main():
+          @function default():
+              INT num = $input("enter an integer")
+              loop i, if i < num, i += 1:
+                  $output(STR "hello world")
+              &return()
+
+        @default()
+
+
+      - all of the logic for this program is stored in the "main" class in the "default" function
+      - it declares an integer with the identifier "num"
+      - it assigns an input to the integer "num"
+      - the loop keyword loops everything inside it "num" times
+      - inside the loop there is an output statement that outputs "hello world"
+      - it then returns nothing from the function
+
+      assembly implementation:
+      (main.txt)
+
+
+      JMP [@default]
+      END []
+
+        STR ["hello world" -> 01] ~hello world @default
+        INT [0 -> 02]  
+        OUP ["enter an integer"]
+        INP [02]
+        INT [0 -> 03] #i
+        CND [i# < #num] @@0003
+        JMP [@@0001]
+        JMP [@@0002]
+        
+          OUP [01] @@0001
+          JMP [@@0003]
+
+        JMP [@default+] @@0002
+
+
+      - as you can see the assembly code is fairly complicated.
+      - the program when compiled fxsirst finds the "default function"
+      - it calls the function in the first line and the second line ends the program.
+      - this basically means that the program will end when the default function returns
+
+
+        

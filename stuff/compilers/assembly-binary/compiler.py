@@ -121,7 +121,6 @@ def compiler(source, binary, assemblyDict, fileName, binaryName):
 
 fileName = input("please enter file name of program to compile\n>>> ")
 logConfirmation = input("do you want a log file for the project? (yes / no)\n>>> ")
-print(f"./source-code/{fileName}", "r")
 
 try:
     source = open(f"./source-code/{fileName}", "r")
