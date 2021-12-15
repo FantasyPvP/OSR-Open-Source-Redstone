@@ -2,6 +2,10 @@
 
 here goes i guess, this is going to be the hardest part of this entire project but it will be necessary in order to be able to program effectively for the environment
 
+the language is going to be called crystal and it will be a high-level and object oriented language. all of the code will be located in classed and functions like a typical
+object based language however it will have an easy to learn, indentation based syntax for functions and loops etc...
+
+
 
 CY++ high level programming language specs / programming style:
 
@@ -31,8 +35,49 @@ the language / syntax:
         - examples of all syntax explained here will be given under this section
         - an in-built function will be called with the "$" symbol
         - a user defined function will be defined and called with "@" in reference to the function so the compiler can find the functions and link their memory locations.
+    
+    - compilation
+        - when the program is compiled it will be compiled class by class, function by function
+        - @ will be used to locate / reference a function so that when it is converted into assembly the correct locations in the program can be filled in by the compiler#
+          it will be part of the syntax for crystal language so it will be familiar when looking at the assembly lanugage
+        - @@ will be used to locate a specific line, this will all
 
         
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

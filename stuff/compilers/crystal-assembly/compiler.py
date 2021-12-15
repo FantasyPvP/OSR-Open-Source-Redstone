@@ -4,7 +4,8 @@
 
 class tokeniser():
     def tokenise(self, crystal, assembly):
-        return
+        for line in crystal.readlines():
+            pass
 
 
 
@@ -25,7 +26,8 @@ class Compiler():
 
 
 def compiler(crystal, assembly, logs):
-    tokeniser.tokenise(crystal)
+    print(char for char in "ginwgeruigbgerygbqgbqyg")
+
 
 
 
