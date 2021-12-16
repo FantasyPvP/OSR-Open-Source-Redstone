@@ -11,6 +11,10 @@ class Tokeniser():
         self.currentLine = 0
 
 
+    def advance(self, chars):
+        self.currentChar += chars
+
+
     def charLister(self, crystal):
 
         # filters through all lines in the program one by one to get a list of the characters on each line
@@ -37,6 +41,8 @@ class Tokeniser():
                 lineChars.pop(-1)
                 self.charlists.append(lineChars)
             self.currentLine +=1
+        del(self.charlists[0])
+        crystal.close()
 
 
 
@@ -46,18 +52,22 @@ class Tokeniser():
         self.currentLine = 0
 
         for x in range(len(self.charlists)):
+            self.currentChar = 0
             tokenlist = []
             line = self.charlists[x]
 
-            # makes tokens from each line
-            for y in range(len(line)):
-                char = line[y]
-                
+            if line[0][0] == " ":
+                tokenlist.append("LVL-" + str(len(line[0]) // 4))
 
+            # makes tokens from each line
+            endl = False
+            while endl == False:
+                char = line[self.currentChar]
+                
                 # inbuilt function ($), user function (@), return statement (&)
 
                 if char == "$" or char == "@" or char == "&":
-                    commandStart = line[y:-1]
+                    commandStart = line[self.currentChar:-1]
                     commandStart.append(line[-1])
                     commandEnd = commandStart[commandStart.index("(")]
                 
@@ -69,10 +79,22 @@ class Tokeniser():
                     if commandStart.index(")") == commandStart.index("(") + 1:
                         tokenlist.append(")")
 
+                
+
+
                     commandLen = len(command)
-                    self.currentChar += commandLen -1
-                    
-                self.currentChar += 1
+                    if self.currentChar == len(line) -1:
+                        endl = True
+                    else:
+                        self.advance(commandLen -1)
+
+                if self.currentChar == len(line) -1:
+                    endl = True 
+                else:   
+                    self.advance(1)
+
+
+
             self.currentLine += 1
             self.tokenlists.append(tokenlist)
 
@@ -108,18 +130,24 @@ class Logger():
 
     def log(self, tokeniser):
 
+        logfile = open("./compiled-code/latest-log.log", "w")
         # logging charlists for source code
 
-        print("character list of source code:\n")
-        for i in tokeniser.charlists:
-            print(i)
-        print("\n\n\n\n\n\n")
+        logfile.write("\n\nsource code:\n\n")
+        for x in tokeniser.charlists:
+            for y in x:
+                logfile.write(y)
+            logfile.write("\n")
 
         # logging all commands / keywords in the script
 
-        print("list of tokens found in program:\n")
-        for i in tokeniser.tokenlists:
-            print(i)
+        logfile.write("\n\nlist of tokens found in program:\n\n")
+        for x in tokeniser.tokenlists:
+            for y in x:
+                logfile.write(y + " ")
+            logfile.write("\n")
+
+        logfile.close()
 
 
 
