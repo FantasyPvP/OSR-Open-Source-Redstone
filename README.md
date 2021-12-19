@@ -1,4 +1,4 @@
-# 16 bit computer 
+# Open Source Redstone
  written in python by a computer obsessed gcse student (my strongest subjects are computer science
 and maths which given I'm starting this kind of project should be fairly obvious)
 
