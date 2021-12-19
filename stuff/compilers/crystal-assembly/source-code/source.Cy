@@ -1,4 +1,4 @@
-class main():
+class ~main():
 
     function @default():
         INT num = $input("enter an integer")
@@ -22,3 +22,4 @@ class main():
                 &break-loop()
             INT variable1 = $multiply(sheesh, sheesh)
         &return(variable1)
+    INT var == sus + i i $output()

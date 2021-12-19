@@ -1,3 +1,22 @@
+def main(assembly, logs):
+    global tokeniser
+    global logger 
+
+    tokeniser = Tokeniser()
+    logger = Logger()
+
+    tokeniser.charLister(crystal)
+    tokeniser.tokeniser()
+
+    logger.source(tokeniser.charlists)
+    logger.tokens(tokeniser.tokenlists)
+    
+
+
+
+
+
+
 
 
 
@@ -15,14 +34,13 @@ class Tokeniser():
 
 
     def advance(self, line, tokenLen):
-        if self.currentChar == len(line) -1:
+        if self.currentChar == len(line) - 1:
             endl = True
             return(endl)
         else:
-            self.currentChar += tokenLen
+            self.currentChar += (tokenLen - 1)
             endl = False
             return(endl)
-
 
 
     def charLister(self, crystal):
@@ -39,7 +57,6 @@ class Tokeniser():
                 if lineChars[0] == " ":
                     for i in range(len(lineChars)):
                         if lineChars[i] != " ":
-                            print(i, "i")
                             i -= 1
                             for x in range(i):
                                 lineChars[i] = lineChars[i] + lineChars[x]
@@ -54,11 +71,7 @@ class Tokeniser():
                 self.charlists.append(lineChars)
 
             self.currentLine +=1
-
-
         crystal.close()
-
-
 
 
 
@@ -72,35 +85,21 @@ class Tokeniser():
             line = self.charlists[x]
 
             if line[0][0] == " ":
-                tokenlist.append("LVL-" + str(len(line[0]) // 4))
+                tokenlist.append("LVL-" + str(len(line[0]) // 4) + " " * len(line[0]))
+            else:
+                tokenlist.append("LVL-0")
 
             # makes tokens from each line
             endl = False
             while endl == False:
                 char = line[self.currentChar]
-                
-                # inbuilt function ($), user function (@), return statement (&)
-
-                if char == "$" or char == "@" or char == "&":
-                    tokenStart = line[self.currentChar:-1]
-                    tokenStart.append(line[-1])
-                    tokenEnd = tokenStart[tokenStart.index("(")]
-                
-                    token = tokenStart[0:tokenStart.index("(")]
-                    token = "".join(token)
-
-                    tokenlist.append(token)
-                    tokenlist.append("(")
-
-                    if tokenStart.index(")") == tokenStart.index("(") + 1:
-                        tokenlist.append(")")
-
-                    tokenLen = len(token)
-                    endl = self.advance(line, tokenLen)
 
                 # string handling
+                if char == ":":
+                    tokenlist.append(char)
+                    endl = self.advance(line, 1)
 
-                elif char == '"':
+                if char == '"':
                     tokenStart = line[self.currentChar:-1]
                     tokenStart.append(tokenStart[-1])
                     tokenStartA = tokenStart[1:]
@@ -108,10 +107,48 @@ class Tokeniser():
                     tokenEnd = tokenStartA[tokenStartA.index('"')]
                     token = tokenStart[0:tokenStartA.index('"') + 2]
                     token = "".join(token)
-                    tokenlist.append(token)
-
+                    tokenlist.append(f"STR-{token}")
                     tokenLen = len(token)
                     endl = self.advance(line, tokenLen)
+
+                # ints
+
+                elif char.isnumeric():
+                    string = ""
+                    for i in line[self.currentChar:]:
+                        string += i
+                        if not(string[-1].isnumeric()):
+                            token = string[0:-1]
+                            tokenlist.append(f"INT-{token}")
+                            endl = self.advance(line, len(token))
+                            break
+
+                # inbuilt function ($), user function (@), return statement (&)
+
+                elif char == "$" or char == "@" or char == "&":
+                    print("works")
+                    tokenStart = line[self.currentChar:-1]
+                    tokenStart.append(line[-1])
+                    tokenEnd = tokenStart[tokenStart.index("(")]
+                    
+                    token = tokenStart[0:tokenStart.index("(")]
+                    token = "".join(token)
+                    tokenlist.append(token)
+                    print(token, "token")
+                    tokenLen = len(token)
+                    endl = self.advance(line, tokenLen)
+
+
+                elif char == "~":
+                    string = "~"
+                    for i in line[self.currentChar+1:]:
+                        string += i
+                        if not(string[-1].isalpha() or string[-1].isnumeric() or string[-1] == "_"):
+                            token = string[1:-1]
+                            tokenlist.append(f"CLASS-{token}")
+                            endl = self.advance(line, len(token)+1)
+                            break
+                        
 
                 # brackets / parenthesis
 
@@ -134,52 +171,84 @@ class Tokeniser():
                         tokenLen = 1
 
                     endl = self.advance(line, tokenLen)
-                    print(token)
                     tokenlist.append(token)
-
-
-
 
                 # declarators
 
                 elif "".join(line[self.currentChar:self.currentChar + 3]) == "INT":
-                    tokenlist.append("INT")
+                    tokenlist.append("TYPE-INT")
                     endl = self.advance(line, 3)
         
                 elif "".join(line[self.currentChar:self.currentChar + 3]) == "STR":
-                    tokenlist.append("STR")
+                    tokenlist.append("TYPE-STR")
                     endl = self.advance(line, 3)
 
                 elif "".join(line[self.currentChar:self.currentChar + 4]) == "BOOL":
-                    tokenlist.append("BOOL")
+                    tokenlist.append("TYPE-BOOL")
                     endl = self.advance(line, 4)
 
                 elif "".join(line[self.currentChar:self.currentChar + 4]) == "CHAR":
-                    tokenlist.append("CHAR")
+                    tokenlist.append("TYPE-CHAR")
                     endl = self.advance(line, 4)
 
 
                 # inbuilt methods
 
+                elif "".join(line[self.currentChar:self.currentChar + 4]) == "loop":
+                    tokenlist.append("INBUILT-LOOP")
+                    endl = self.advance(line, 4)
+                elif "".join(line[self.currentChar:self.currentChar + 2]) == "if":
+                    tokenlist.append("INBUILT-IF")
+                    endl = self.advance(line, 2)
+                elif "".join(line[self.currentChar:self.currentChar + 4]) == "elif":
+                    tokenlist.append("INBUILT-ELIF")
+                    endl = self.advance(line, 4)
+                elif "".join(line[self.currentChar:self.currentChar + 4]) == "else":
+                    tokenlist.append("INBUILT-ELSE")
+                    endl = self.advance(line, 4)
+                elif "".join(line[self.currentChar:self.currentChar + 4]) == "pass":
+                    tokenlist.append("INBUILT-PASS")
+                    endl = self.advance(line, 4)
+                elif "".join(line[self.currentChar:self.currentChar + 5]) == "break":
+                    tokenlist.append("INBUILT-BREAK")
+                    endl = self.advance(line, 5)
+                elif "".join(line[self.currentChar:self.currentChar + 5]) == "while":
+                    tokenlist.append("INBUILT-WHILE")
+                    endl = self.advance(line, 5)
+                elif "".join(line[self.currentChar:self.currentChar + 5]) == "class":
+                    tokenlist.append("INBUILT-CLASS")
+                    endl = self.advance(line, 5)
+                elif "".join(line[self.currentChar:self.currentChar + 8]) == "function":
+                    tokenlist.append("INBUILT-FUNCTION")
+                    endl = self.advance(line, 8)
 
 
+                # variables
 
-
-
-
-                endl = self.advance(line, 1)
+                elif char.isalpha():
+                    string = ""
+                    for i in line[self.currentChar:]:
+                        string += i
+                        if not(string[-1].isalpha() or string[-1].isnumeric() or string[-1] == "_"):
+                            token = string[0:-1]
+                            tokenlist.append(f"VAR-{token}")
+                            endl = self.advance(line, len(token))
+                            break
+                
+                
+                print(char)
+                endl = self.advance(line, 2)
 
 
             self.currentLine += 1
             self.tokenlists.append(tokenlist)
 
-
-
-
         return
         
 
 
+class compiler():
+    compiler
 
 
 
@@ -189,41 +258,36 @@ class Tokeniser():
 
 
 
-def compiler(crystal, assembly, logs):
-    tokeniser = Tokeniser()
-    logger = Logger()
-    tokeniser.charLister(crystal)
-    tokeniser.tokeniser()
-    logger.log(tokeniser)
-    
 
 
 
-class Logger():
-    def __init__(self):
-        return
 
-    def log(self, tokeniser):
 
-        logfile = open("./compiled-code/latest-log.log", "w")
-        # logging charlists for source code
 
-        logfile.write("\n\nsource code:\n\n")
-        for x in tokeniser.charlists:
-            for y in x:
-                logfile.write(y)
-            logfile.write("\n")
 
-        # logging all commands / keywords in the script
 
-        logfile.write("\n\nlist of tokens found in program:\n\n")
-        for x in tokeniser.tokenlists:
-            for y in x:
-                logfile.write(y)
-                logfile.write(" ")
-            logfile.write("\n")
 
-        logfile.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -240,8 +304,102 @@ class Compiler():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Logger():
+    def __init__(self):
+        logfile = open("./compiled-code/latest-log.log", "w")
+        logfile.write("logs for compilation of file: ./source-code/source.Cy")
+
+
+    def source(self, source):
+        logfile = open("./compiled-code/latest-log.log", "a")
+
+        # logging charlists for source code
+
+        logfile.write("\n\nsource code:\n\n")
+        for x in source:
+            print(x, "source")
+            for y in x:
+                print(y, "char")
+                logfile.write(y)
+            logfile.write("\n")
+
+        logfile.close()
+
+
+    def tokens(self, tokens):
+        logfile = open("./compiled-code/latest-log.log", "a")
+    
+        # logging all commands / keywords in the script
+
+        logfile.write("\n\nlist of tokens found in program:\n\n")
+        for x in tokens:
+            for y in x:
+                logfile.write(y)
+                logfile.write(" ")
+            logfile.write("\n")
+
+        logfile.close()
+
+    def compilingErrors():
+        return
+    
+
+
+
+global crystal
 crystal = open(f"./source-code/source.Cy", "r")
-compiler(crystal, "sheesh", "sheeesh")
+main("sheesh", "sheeesh")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
