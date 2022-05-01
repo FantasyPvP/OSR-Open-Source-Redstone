@@ -39,3 +39,10 @@ my long term goal (if i actually work on this project and not forget about it) i
     - make this into a full application (im not gonna try doing a pyinstaller exe though as im using linux as my development platform so it would be impractical)
     - for the os create a spec that is easy to program for, efficient / scalable and can run on a Minecraft computer so someone can make use of the architecture
         to make something that can run a standard program library that I and anyone else who knows the spec can program for.
+
+
+
+(2022 EDIT)
+
+ive spent the last few weeks learning rust (a low level programming language similar to c++ but with greater memory safety)
+i figured that it might be a good idea to start working on this project again and amybe with some of my friends from a coding club that i'm a part of
