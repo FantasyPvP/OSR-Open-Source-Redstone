@@ -1,3 +1,21 @@
+
+
+this repo is archived due to being corrupted (for some reason it always gives erros when cloning)
+
+i will publish a new version of this repo which will be written in rust and will have some of the old code and ideas incorporated in 
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Open Source Redstone
  written in python by a computer obsessed gcse student (my strongest subjects are computer science
 and maths which given I'm starting this kind of project should be fairly obvious)
